@@ -1,8 +1,8 @@
 import pyxel
+import time
 pyxel.init(256, 256, title="Nuit du Code")
 
-path = [(128, 0), (128, 8), (128, 16), (128,24), (136,24), (144,24), (152,24), (160,24), (168,24), (176,24), (184,24), (192,24), (200,24), (208,24), (208,32)]
-
+path = [(0, 128), (32, 128), (32, 0), (64, 0), (64, 256), (96, 256), (96, 256), (128, 256), (128, 0), (160, 0), (160, 256), (192, 256), (224, 256), (224, 128), (256, 128)]
 class mob:
     def __init__(self, x, y, hp):
         self.x = x
@@ -11,8 +11,8 @@ class mob:
         self.speed = 1
 
     def move(self, dx, dy):
-        self.x += dx * self.speed
-        self.y += dy * self.speed
+        for i in range path:
+             
 
     def hurt(self, damage):
         self.hp -= damage
@@ -23,7 +23,20 @@ class mob:
         wave.mobs.remove(self)
 
     def draw(self):
+        pyxel.cls(0)  
         pyxel.rect(self.x, self.y, 10, 10, 8)
+
+    def update(self):
+        if path:
+            target_x, target_y = path[0]
+            dx = target_x - self.x
+            dy = target_y - self.y
+            distance = (dx**2 + dy**2) ** 0.5
+            if distance < self.speed:
+                self.x, self.y = target_x, target_y
+                path.pop(0)  
+            else:
+                self.move(dx / distance, dy / distance)
 
     def get_position(self):
         return (self.x, self.y)
@@ -47,18 +60,17 @@ class wave:
         for mob in self.mobs:
             mob.draw()
 
+    def update(self):
+        for mob in self.mobs:
+            mob.update()
+
 mob1 = mob(10, 10, 100)
-wave1 = wave([mob1])
+mob2 = speedster(20, 20)
+wave1 = wave([mob1, mob2])
 
 
 
 
-def update():
-    if pyxel.btnp(pyxel.KEY_Q):
-        pyxel.quit()
 
-def draw():
-    pyxel.cls(0)
-    pyxel.rect(10, 10, 20, 20, 11)
  
-pyxel.run(update, draw)
+pyxel.run(wave1.update, wave1.draw)
