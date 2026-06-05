@@ -10,9 +10,8 @@ class mob:
         self.hp = hp
         self.speed = 1
 
-    def move(self, dx, dy):
-        for i in range path:
-             
+ 
+     
 
     def hurt(self, damage):
         self.hp -= damage
