@@ -29,22 +29,26 @@ class game:
                 self.current_wave += 1
         for tower in self.towers:
             tower.update(self.waves[self.current_wave], self.player)
-        self.place_tower()
+        self.place_tower(self.player)
         self.waves.append(self.create_wave(self.current_wave))
 
-    def place_tower(self):
+    def place_tower(self, player):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            new_tower = tower(pyxel.mouse_x, pyxel.mouse_y)
-            self.add_tower(new_tower)
+            if player.spend_money(5):
+                new_tower = tower(pyxel.mouse_x, pyxel.mouse_y)
+                self.add_tower(new_tower)
         if pyxel.btnp(pyxel.KEY_0):
-            new_tower = tanks_tower(pyxel.mouse_x, pyxel.mouse_y)
+            if player.spend_money(10):
+                new_tower = tanks_tower(pyxel.mouse_x, pyxel.mouse_y)
             self.add_tower(new_tower)
         if pyxel.btnp(pyxel.KEY_1):
-            new_tower = sniper_tower(pyxel.mouse_x, pyxel.mouse_y)
-            self.add_tower(new_tower)
+            if player.spend_money(15):
+                new_tower = sniper_tower(pyxel.mouse_x, pyxel.mouse_y)
+                self.add_tower(new_tower)
         if pyxel.btnp(pyxel.KEY_2):
-            new_tower = money_tower(pyxel.mouse_x, pyxel.mouse_y)
-            self.add_tower(new_tower)
+            if player.spend_money(20):
+                new_tower = money_tower(pyxel.mouse_x, pyxel.mouse_y)
+                self.add_tower(new_tower)
 
     def draw(self):
         if self.current_wave < len(self.waves):
@@ -248,6 +252,11 @@ class player:
     def earn_money(self, amount):
         self.money += amount
 
+    def spend_money(self, amount):
+        if self.money >= amount:
+            self.money -= amount
+            return True
+        return False
 
 
 
