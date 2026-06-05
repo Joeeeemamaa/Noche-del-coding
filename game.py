@@ -129,11 +129,11 @@ class wave:
 
 
 class tower:
-    def __init__(self, x, y, price, cd):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.price = price
-        self.cd = cd
+        self.price = 5
+        self.cd = 10
         self.range = 50
         self.damage = 10
 
@@ -143,7 +143,7 @@ class tower:
 
     def update(self, wave):
         for mob in wave.mobs:
-            if self.in_range(mob) and (frame_count % self.cd == 0):
+            if self.in_range(mob) and (pyxel.frame_count % self.cd == 0):
                 mob.hurt(self.damage, wave)
 
     def in_range(self, mob):
@@ -153,7 +153,9 @@ class tower:
 
 class tanks_tower (tower):
     def __init__(self, x, y):
-        super().__init__(x, y, 10, 20)
+        super().__init__(x, y)
+        self.price = 10
+        self.cd = 20
         self.range = 50
         self.damage = 5
 
@@ -162,7 +164,7 @@ class tanks_tower (tower):
 
     def update(self, wave):
         for mob in wave.mobs:
-            if self.in_range(mob) and (frame_count % self.cd == 0):
+            if self.in_range(mob) and (pyxel.frame_count % self.cd == 0):
                 mob.hurt(self.damage, wave)
 
     def in_range(self, mob):
@@ -172,7 +174,9 @@ class tanks_tower (tower):
 
 class sniper_tower (tower):
     def __init__(self, x, y):
-        super().__init__(x, y, 15, 30)
+        super().__init__(x, y)
+        self.price = 15
+        self.cd = 30
         self.range = 100
         self.damage = 15
 
@@ -181,7 +185,7 @@ class sniper_tower (tower):
 
     def update(self, wave):
         for mob in wave.mobs:
-            if self.in_range(mob) and (frame_count % self.cd == 0):
+            if self.in_range(mob) and (pyxel.frame_count % self.cd == 0):
                 mob.hurt(self.damage, wave)
 
     def in_range(self, mob):
@@ -191,7 +195,9 @@ class sniper_tower (tower):
 
 class money_tower (tower):
     def __init__(self, x, y):
-        super().__init__(x, y, 20, 30)
+        super().__init__(x, y)
+        self.price = 20
+        self.cd = 30
         self.range = 0
         self.damage = 0
 
@@ -205,7 +211,7 @@ class money_tower (tower):
         self.create_money(player)
 
     def create_money(self, player):
-        if (frame_count % self.cd == 0):
+        if (pyxel.frame_count % self.cd == 0):
             player.earn_money(5)
 
 
