@@ -1,4 +1,5 @@
 import pyxel
+
 import time
 pyxel.init(256, 256, title="Nuit du Code")
 pyxel.mouse(True)
@@ -128,19 +129,85 @@ class wave:
 
 
 class tower:
-    def __init__(self, x, y):
+    def __init__(self, x, y, price, cd):
         self.x = x
         self.y = y
+        self.price = price
+        self.cd = cd
         self.range = 50
         self.damage = 10
+
 
     def draw(self):
         pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
 
     def update(self, wave):
         for mob in wave.mobs:
+            if self.in_range(mob) and (frame_count % self.cd == 0):
+                mob.hurt(self.damage, wave)
+
+    def in_range(self, mob):
+        mob_x, mob_y = mob.get_position()
+        distance = ((self.x - mob_x) ** 2 + (self.y - mob_y) ** 2) ** 0.5
+        return distance <= self.range
+
+class tanks_tower (tower):
+    def __init__(self, x, y):
+        super().__init__(x, y, 10, 20)
+        self.range = 50
+        self.damage = 5
+
+    def draw(self):
+        pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
+
+    def update(self, wave):
+        for mob in wave.mobs:
+            if self.in_range(mob) and (frame_count % self.cd == 0):
+                mob.hurt(self.damage, wave)
+
+    def in_range(self, mob):
+        mob_x, mob_y = mob.get_position()
+        distance = ((self.x - mob_x) ** 2 + (self.y - mob_y) ** 2) ** 0.5
+        return distance <= self.range
+
+class sniper_tower (tower):
+    def __init__(self, x, y):
+        super().__init__(x, y, 15, 30)
+        self.range = 100
+        self.damage = 15
+
+    def draw(self):
+        pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
+
+    def update(self, wave):
+        for mob in wave.mobs:
+            if self.in_range(mob) and (frame_count % self.cd == 0):
+                mob.hurt(self.damage, wave)
+
+    def in_range(self, mob):
+        mob_x, mob_y = mob.get_position()
+        distance = ((self.x - mob_x) ** 2 + (self.y - mob_y) ** 2) ** 0.5
+        return distance <= self.range
+
+class money_tower (tower):
+    def __init__(self, x, y):
+        super().__init__(x, y, 20, 30)
+        self.range = 0
+        self.damage = 0
+
+    def draw(self):
+        pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
+
+    def update(self, wave, player):
+        for mob in wave.mobs:
             if self.in_range(mob):
                 mob.hurt(self.damage, wave)
+        self.create_money(player)
+
+    def create_money(self, player):
+        if (frame_count % self.cd == 0):
+            player.earn_money(5)
+
 
     def in_range(self, mob):
         mob_x, mob_y = mob.get_position()
