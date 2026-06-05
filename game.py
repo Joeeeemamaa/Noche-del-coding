@@ -160,7 +160,7 @@ class tanks_tower (tower):
         self.damage = 5
 
     def draw(self):
-        pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
+        pyxel.blt(self.x, self.y, 0, 0, 32, 16, 16, 2)
 
     def update(self, wave):
         for mob in wave.mobs:
@@ -181,7 +181,7 @@ class sniper_tower (tower):
         self.damage = 15
 
     def draw(self):
-        pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
+        pyxel.blt(self.x, self.y, 0, 0, 48, 16, 16, 2)
 
     def update(self, wave):
         for mob in wave.mobs:
@@ -202,7 +202,7 @@ class money_tower (tower):
         self.damage = 0
 
     def draw(self):
-        pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
+        pyxel.blt(self.x, self.y, 0, 0, 64, 16, 16, 2)
 
     def update(self, wave, player):
         for mob in wave.mobs:
