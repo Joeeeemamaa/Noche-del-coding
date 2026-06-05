@@ -13,6 +13,7 @@ class game:
         self.towers = []
         self.waves = []
         self.current_wave = 1
+        self.player = player()
 
     def add_tower(self, tower):
         self.towers.append(tower)
@@ -27,13 +28,22 @@ class game:
             if not current_wave.mobs:
                 self.current_wave += 1
         for tower in self.towers:
-            tower.update(self.waves[self.current_wave])
+            tower.update(self.waves[self.current_wave], self.player)
         self.place_tower()
         self.waves.append(self.create_wave(self.current_wave))
 
     def place_tower(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             new_tower = tower(pyxel.mouse_x, pyxel.mouse_y)
+            self.add_tower(new_tower)
+        if pyxel.btnp(pyxel.KEY_0):
+            new_tower = tanks_tower(pyxel.mouse_x, pyxel.mouse_y)
+            self.add_tower(new_tower)
+        if pyxel.btnp(pyxel.KEY_1):
+            new_tower = sniper_tower(pyxel.mouse_x, pyxel.mouse_y)
+            self.add_tower(new_tower)
+        if pyxel.btnp(pyxel.KEY_2):
+            new_tower = money_tower(pyxel.mouse_x, pyxel.mouse_y)
             self.add_tower(new_tower)
 
     def draw(self):
@@ -133,7 +143,7 @@ class tower:
         self.x = x
         self.y = y
         self.price = 5
-        self.cd = 10
+        self.cd = 5
         self.range = 50
         self.damage = 10
 
@@ -141,7 +151,7 @@ class tower:
     def draw(self):
         pyxel.blt(self.x, self.y, 0, 0, 0, 16, 16, 2)
 
-    def update(self, wave):
+    def update(self, wave, player):
         for mob in wave.mobs:
             if self.in_range(mob) and (pyxel.frame_count % self.cd == 0):
                 mob.hurt(self.damage, wave)
@@ -155,14 +165,14 @@ class tanks_tower (tower):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.price = 10
-        self.cd = 20
+        self.cd = 10
         self.range = 50
         self.damage = 5
 
     def draw(self):
         pyxel.blt(self.x, self.y, 0, 0, 32, 16, 16, 2)
 
-    def update(self, wave):
+    def update(self, wave, player):
         for mob in wave.mobs:
             if self.in_range(mob) and (pyxel.frame_count % self.cd == 0):
                 mob.hurt(self.damage, wave)
@@ -176,14 +186,14 @@ class sniper_tower (tower):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.price = 15
-        self.cd = 30
+        self.cd = 15
         self.range = 100
         self.damage = 15
 
     def draw(self):
         pyxel.blt(self.x, self.y, 0, 0, 48, 16, 16, 2)
 
-    def update(self, wave):
+    def update(self, wave, player):
         for mob in wave.mobs:
             if self.in_range(mob) and (pyxel.frame_count % self.cd == 0):
                 mob.hurt(self.damage, wave)
